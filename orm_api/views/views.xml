@@ -1,0 +1,129 @@
+<openerp>
+    <data>
+
+
+
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="orm_api_view_partner_form" model="ir.ui.view">
+            <field name="name">orm_api_view_partner_form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <field name="phone" position="after">
+                    <field name="student_id"/>
+                </field>
+
+            </field>
+        </record>
+
+
+        <record id="orm_api_form" model="ir.ui.view">
+            <field name="name">Estudiantes</field>
+            <field name="model">orm_api.student</field>
+            <field name="arch" type="xml">
+                <form string="Estudiantes">
+                    <header>
+                        <button name="state_toggle" string="Cambiar estado" type="object"/>
+                        <field name="state" widget="statusbar" nolabel="1"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name" attrs="{'required': [('state','=','ac')],
+                                                       'invisible': [('state','=','draft')]}"/>
+                            <field name="lastname"/>
+                            <field name="fullname" />
+                            <field name="gender"/>
+                            <field name="date"/>
+                            <field name="credit" groups="__export__.res_groups_18"/>
+                            <field name="tags" widget="many2many_tags"/>
+                        </group>
+                        <notebook states="ac,'">
+                            <page string="Colegios">
+                                <group>
+                                    <field name="colegio_id"/>
+                                </group>
+                            </page>
+                            <page string="Telefonos">
+                                <group>
+                                    <field name="phone_ids"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="orm_api_estudiantes_tree" model="ir.ui.view">
+            <field name="name">Estudiantes tree</field>
+            <field name="model">orm_api.student</field>
+            <field name="arch" type="xml">
+                <tree string="Colegios">
+                    <field name="name"/>
+                    <field name="credit"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="orm_api_colegios_search">
+            <field name="name">orm_api_colegios_search</field>
+            <field name="model">orm_api.student</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="Nombre"/>
+                    <field name="lastname" string="Apellido"/>
+                    <separator/>
+                    <filter name="credit" string="Credito > 0" domain="[('credit','>',500)]"/>
+                    <group expand="0" string="Agrupar por">
+                        <filter string="Credito" context="{'group_by':'credit'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="orm_api_action" model="ir.actions.act_window">
+            <field name="name">Estudiantes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">orm_api.student</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Nuevo modulo ORM API
+                </p>
+                <p>
+                    Aqui aprenderemos mucho sobre el orm de odoo
+                </p>
+            </field>
+        </record>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="orm_api_menu" name="ORM API" action="orm_api_action" sequence=""/>
+
+
+        <record id="orm_api_colegios_action" model="ir.actions.act_window">
+            <field name="name">Colegios</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">orm_api.colegios</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                <!-- Add Text Here -->
+              </p><p>
+                <!-- More details about what a user can do with this object will be OK -->
+              </p>
+            </field>
+        </record>
+
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="orm_api_colegios_menu" name="Colegios" action="orm_api_colegios_action" sequence=""/>
+
+    </data>
+</openerp>

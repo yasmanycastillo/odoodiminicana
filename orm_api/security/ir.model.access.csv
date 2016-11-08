@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_orm_api_orm_api,orm_api.orm_api,model_orm_api_orm_api,,1,0,0,0
