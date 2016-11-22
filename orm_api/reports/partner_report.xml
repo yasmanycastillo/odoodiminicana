@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <report
+                id="res_partner_report"
+                model="res.partner"
+                string="Custom partner report 01"
+                report_type="qweb-pdf"
+                name="orm_api.res_partner_report_01"
+                file="orm_api.res_partner_report_01"
+        />
+
+        <!--attachment_use="True"-->
+        <!--attachment="(object.state in ('open','paid')) and-->
+        <!--('INV'+(object.number or '').replace('/','')+'.pdf')"-->
+
+
+        <template id="res_partner_report_01">
+            <t t-call="report.html_container">
+
+                <t t-call="report.internal_layout">
+                    <div class="page">
+
+                        <style type="text/css">
+                            .tg {
+                                border-collapse: collapse;
+                                border-spacing: 0;
+                            }
+
+                            .tg td {
+                                font-family: Arial, sans-serif;
+                                font-size: 14px;
+                                padding: 10px 5px;
+                                border-style: solid;
+                                border-width: 1px;
+                                overflow: hidden;
+                                word-break: normal;
+                            }
+
+                            .tg th {
+                                font-family: Arial, sans-serif;
+                                font-size: 14px;
+                                font-weight: normal;
+                                padding: 10px 5px;
+                                border-style: solid;
+                                border-width: 1px;
+                                overflow: hidden;
+                                word-break: normal;
+                            }
+
+                            .tg .tg-lqy6 {
+                                text-align: right;
+                                vertical-align: top
+                            }
+
+                            .tg .tg-amwm {
+                                font-weight: bold;
+                                text-align: center;
+                                vertical-align: top
+                            }
+
+                            .tg .tg-yw4l {
+                                vertical-align: top
+                            }
+                        </style>
+
+                        <table class="tg table">
+                            <tr>
+                                <th class="tg-amwm">Nombre</th>
+                                <th class="tg-amwm">Tel</th>
+                                <th class="tg-amwm">Email</th>
+                            </tr>
+
+                            <t t-foreach="docs" t-as="o">
+                                <tr>
+                                    <td class="tg-yw4l">
+                                        <span t-if="name" t-field="o.name"/>
+                                    </td>
+                                    <td class="tg-lqy6">
+                                        <span t-if="phone" t-field="o.phone"/>
+                                    </td>
+                                    <td class="tg-yw4l">
+                                        <span t-if="email" t-field="o.email"/>
+                                    </td>
+                                </tr>
+                            </t>
+
+                        </table>
+                    </div>
+
+                </t>
+            </t>
+        </template>
+
+
+        <report
+                id="account_invoices"
+                model="account.invoice"
+                string="Invoices"
+                report_type="qweb-pdf"
+                name="orm_api.report_invoice"
+                file="orm_api.report_invoice"
+                attachment_use="True"
+                attachment="(object.state in ('open','paid')) and
+        ('INV'+(object.number or '').replace('/','')+'.pdf')"/>
+
+        <template id="report_invoice">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+
+                        <h1><span t-field="o.number"/></h1>
+                        <t t-foreach="o.invoice_line_ids" t-as="line">
+                            <span t-field="line.name"></span>
+                        </t>
+
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</openerp>
