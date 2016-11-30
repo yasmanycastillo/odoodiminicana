@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from openerp import models, fields, api, exceptions
 import openerp.addons.decimal_precision as dp
 
@@ -51,10 +50,10 @@ class Student(models.Model):
         else:
             self.fullname2 = u"{} {}".format(self.name, self.lastname)
 
-    @api.constrains("credit")
-    def more_than_two(self):
-        if self.credit < 100:
-            raise exceptions.ValidationError("El credito debe ser mayor que 100")
+    # @api.constrains("credit")
+    # def more_than_two(self):
+    #     if self.credit < 100:
+    #         raise exceptions.ValidationError("El credito debe ser mayor que 100")
         
     @api.model
     def create(self, vals):
@@ -67,7 +66,6 @@ class Student(models.Model):
     @api.multi
     def unlink(self):
         return super(Student, self)
-
 
     @api.multi
     def create_auto_data(self):
@@ -111,3 +109,24 @@ class CrmLead(models.Model):
     _inherit = "res.partner"
 
     student_id = fields.Many2one("orm_api.student")
+
+
+class OrmApiReport(models.Model):
+    """Generador de reporte"""
+    _name = 'report.orm_api.partner_report'
+
+    @api.multi
+    def render_html(self, data):
+        print data['form']
+        # from ipdb import set_trace;set_trace() # BREAK DOWN
+        Report_obj = self.env['report']
+        # docs = self.env[Report_obj.model].browse(self.env.context.get('active_id'))
+        report = Report_obj._get_report_from_name('orm_api.partner_report')
+        docargs = {
+            "doc_ids": self._ids,
+            "doc_model": report.model,
+            # "docs": docs,
+            'data': data['form'],
+        }
+
+        return Report_obj.render('orm_api.partner_report', docargs)

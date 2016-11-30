@@ -28,6 +28,7 @@
         'views/views.xml',
         'views/templates.xml',
         'reports/partner_report.xml',
+        'wizard/orm_api_wizard_report.xml'
 
     ],
     # only loaded in demonstration mode

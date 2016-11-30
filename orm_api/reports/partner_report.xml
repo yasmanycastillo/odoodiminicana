@@ -4,122 +4,53 @@
 
         <report
                 id="res_partner_report"
-                model="res.partner"
-                string="Custom partner report 01"
+                model="orm_api.student"
+                string="Reporte de estudiantes"
                 report_type="qweb-pdf"
-                name="orm_api.res_partner_report_01"
-                file="orm_api.res_partner_report_01"
+                name="orm_api.partner_report"
+                file="orm_api.partner_report"
         />
 
-        <!--attachment_use="True"-->
-        <!--attachment="(object.state in ('open','paid')) and-->
-        <!--('INV'+(object.number or '').replace('/','')+'.pdf')"-->
-
-
-        <template id="res_partner_report_01">
+        <template id="partner_report">
             <t t-call="report.html_container">
-
-                <t t-call="report.internal_layout">
+                <t t-call="report.external_layout">
                     <div class="page">
-
-                        <style type="text/css">
-                            .tg {
-                                border-collapse: collapse;
-                                border-spacing: 0;
-                            }
-
-                            .tg td {
-                                font-family: Arial, sans-serif;
-                                font-size: 14px;
-                                padding: 10px 5px;
-                                border-style: solid;
-                                border-width: 1px;
-                                overflow: hidden;
-                                word-break: normal;
-                            }
-
-                            .tg th {
-                                font-family: Arial, sans-serif;
-                                font-size: 14px;
-                                font-weight: normal;
-                                padding: 10px 5px;
-                                border-style: solid;
-                                border-width: 1px;
-                                overflow: hidden;
-                                word-break: normal;
-                            }
-
-                            .tg .tg-lqy6 {
-                                text-align: right;
-                                vertical-align: top
-                            }
-
-                            .tg .tg-amwm {
-                                font-weight: bold;
-                                text-align: center;
-                                vertical-align: top
-                            }
-
-                            .tg .tg-yw4l {
-                                vertical-align: top
-                            }
-                        </style>
-
-                        <table class="tg table">
-                            <tr>
-                                <th class="tg-amwm">Nombre</th>
-                                <th class="tg-amwm">Tel</th>
-                                <th class="tg-amwm">Email</th>
-                            </tr>
-
-                            <t t-foreach="docs" t-as="o">
+                        <table class="table table-hover table-striped">
+                            <thead>
                                 <tr>
-                                    <td class="tg-yw4l">
-                                        <span t-if="name" t-field="o.name"/>
-                                    </td>
-                                    <td class="tg-lqy6">
-                                        <span t-if="phone" t-field="o.phone"/>
-                                    </td>
-                                    <td class="tg-yw4l">
-                                        <span t-if="email" t-field="o.email"/>
-                                    </td>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Género</th>
                                 </tr>
-                            </t>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="data" t-as="line">
+                                    <!--
+                                        Si los datos que estamos leyendo provienen directamente del modelo,
+                                        podemos usar el atributo t-field, pero si es de una lista o dict
+                                        debemos usar t-esc, de lo contrario dara error,
+                                        ese fue el ultimo error que vimos.
+                                        Gracias por soportar!! xD
+                                    -->
+                                    <tr>
+                                        <td>
+                                            <span t-esc="line.get('nombre')"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line.get('apellido')"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line.get('genero')"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
 
                         </table>
                     </div>
-
                 </t>
             </t>
         </template>
-
-
-        <report
-                id="account_invoices"
-                model="account.invoice"
-                string="Invoices"
-                report_type="qweb-pdf"
-                name="orm_api.report_invoice"
-                file="orm_api.report_invoice"
-                attachment_use="True"
-                attachment="(object.state in ('open','paid')) and
-        ('INV'+(object.number or '').replace('/','')+'.pdf')"/>
-
-        <template id="report_invoice">
-            <t t-call="report.html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-call="report.external_layout">
-
-                        <h1><span t-field="o.number"/></h1>
-                        <t t-foreach="o.invoice_line_ids" t-as="line">
-                            <span t-field="line.name"></span>
-                        </t>
-
-                    </t>
-                </t>
-            </t>
-        </template>
-
 
     </data>
 </openerp>

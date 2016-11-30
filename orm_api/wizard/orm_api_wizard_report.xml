@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="orm_api.student_wizard_form" model="ir.ui.view">
+        <field name="name">Wizard Reportes</field>
+        <field name="model">orm_api.wizard_report</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <html>
+                    <blockquote>
+                        Bienvenido!!!
+                    </blockquote>
+                </html>
+                <footer>
+                    <button name="print_report" type="object" string="Generar reporte"></button>
+                    ó <button name="cancel" type="action" string="Cancelar"></button>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="orm_api.student_wizard_action" model="ir.actions.act_window">
+        <field name="name">Generar Reporte</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">orm_api.wizard_report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="orm_api.student_wizard_form"/>
+       <field name="target">new</field>
+    </record>
+
+    <!-- This Menu Item must have a parent and an action -->
+    <menuitem id="orm_api_wizard_menu" name="Reportes" parent="orm_api_colegios_menu"/>
+    <menuitem id="orm_api_wizard_student_menu" name="Estudiantes" parent="orm_api_wizard_menu" action="orm_api.student_wizard_action" sequence=""/>
+</odoo>
